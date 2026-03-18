@@ -24,6 +24,9 @@ const providerConnectLinks: Record<ConnectedProvider, string | null> = {
   zoom: '/api/integrations/zoom/connect',
   notion: '/api/integrations/notion/connect',
   linkedin: '/api/integrations/linkedin/connect',
+  microsoft_outlook:  '/api/integrations/microsoft/connect?scopeSet=outlook',
+  microsoft_calendar: '/api/integrations/microsoft/connect?scopeSet=calendar',
+  microsoft_teams:    '/api/integrations/microsoft/connect?scopeSet=teams',
 };
 
 function GoogleLogo() {
@@ -73,6 +76,17 @@ function LinkedInLogo() {
   );
 }
 
+function MicrosoftLogo() {
+  return (
+    <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24">
+      <rect width="11" height="11" x="1" y="1" fill="#F25022" />
+      <rect width="11" height="11" x="13" y="1" fill="#7FBA00" />
+      <rect width="11" height="11" x="1" y="13" fill="#00A4EF" />
+      <rect width="11" height="11" x="13" y="13" fill="#FFB900" />
+    </svg>
+  );
+}
+
 function ProviderLogo({ provider }: { provider: ConnectedProvider }) {
   if (provider === ConnectedProvider.zoom) {
     return <ZoomLogo />;
@@ -89,6 +103,14 @@ function ProviderLogo({ provider }: { provider: ConnectedProvider }) {
 
   if (provider === ConnectedProvider.linkedin) {
     return <LinkedInLogo />;
+  }
+
+  if (
+    provider === ConnectedProvider.microsoft_outlook ||
+    provider === ConnectedProvider.microsoft_calendar ||
+    provider === ConnectedProvider.microsoft_teams
+  ) {
+    return <MicrosoftLogo />;
   }
 
   return (

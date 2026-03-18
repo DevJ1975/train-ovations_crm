@@ -8,6 +8,7 @@ import {
   getConnectedAccountsForUser,
   GoogleAuthService,
   LinkedInService,
+  MicrosoftGraphService,
   NotionSyncService,
   ZoomService,
 } from '@/lib/integrations';
@@ -20,17 +21,18 @@ export async function GET() {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const [accounts, googleSummaries, zoomSummary, notionSummary, linkedInSummary] = await Promise.all([
+  const [accounts, googleSummaries, zoomSummary, notionSummary, linkedInSummary, microsoftSummaries] = await Promise.all([
     getConnectedAccountsForUser(user.id),
     GoogleAuthService.getProviderSummaries(user.id),
     ZoomService.getProviderSummary(user.id),
     NotionSyncService.getProviderSummary(user.id),
     LinkedInService.getProviderSummary(user.id),
+    MicrosoftGraphService.getProviderSummaries(user.id),
   ]);
 
   return NextResponse.json({
     accounts,
-    summaries: [...googleSummaries, zoomSummary, notionSummary, linkedInSummary].map((summary) => ({
+    summaries: [...googleSummaries, zoomSummary, notionSummary, linkedInSummary, ...microsoftSummaries].map((summary) => ({
       ...summary,
       lastSyncedAt: summary.lastSyncedAt?.toISOString() ?? null,
     })),

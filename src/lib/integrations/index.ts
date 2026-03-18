@@ -11,3 +11,7 @@ export * from './permissions';
 export * from './types';
 export * from './zoom-service';
 export * from './linkedin-service';
+export * from './microsoft-graph-service';
+export * from './microsoft-outlook-service';
+export * from './microsoft-calendar-service';
+export * from './microsoft-teams-service';
