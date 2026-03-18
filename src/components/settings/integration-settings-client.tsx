@@ -76,13 +76,51 @@ function LinkedInLogo() {
   );
 }
 
-function MicrosoftLogo() {
+function OutlookLogo() {
   return (
-    <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24">
-      <rect width="11" height="11" x="1" y="1" fill="#F25022" />
-      <rect width="11" height="11" x="13" y="1" fill="#7FBA00" />
-      <rect width="11" height="11" x="1" y="13" fill="#00A4EF" />
-      <rect width="11" height="11" x="13" y="13" fill="#FFB900" />
+    <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="4" fill="#0078D4" />
+      {/* Envelope back panel */}
+      <rect x="11" y="7" width="10" height="10" rx="1" fill="#50D9FF" />
+      {/* Envelope fold line */}
+      <path d="M11 8l5 4 5-4" stroke="#0078D4" strokeWidth="1" fill="none" />
+      {/* Outlook "O" circle overlay */}
+      <rect x="3" y="8" width="9" height="9" rx="4.5" fill="#fff" />
+      <rect x="5.5" y="10.5" width="4" height="4" rx="2" fill="#0078D4" />
+    </svg>
+  );
+}
+
+function CalendarLogo() {
+  return (
+    <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="4" fill="#0078D4" />
+      {/* Calendar header */}
+      <rect x="4" y="5" width="16" height="3" rx="1" fill="#fff" fillOpacity="0.3" />
+      {/* Calendar body */}
+      <rect x="4" y="9" width="16" height="10" rx="1" fill="#fff" />
+      {/* Day number */}
+      <text x="12" y="17" textAnchor="middle" fontSize="7" fontWeight="700" fill="#0078D4" fontFamily="system-ui">
+        28
+      </text>
+      {/* Binding dots */}
+      <circle cx="8.5" cy="5" r="1.2" fill="#fff" />
+      <circle cx="15.5" cy="5" r="1.2" fill="#fff" />
+    </svg>
+  );
+}
+
+function TeamsLogo() {
+  return (
+    <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="4" fill="#6264A7" />
+      {/* Primary person head */}
+      <circle cx="13.5" cy="8" r="2.5" fill="#fff" />
+      {/* Primary person body */}
+      <path d="M8.5 19c0-2.76 2.24-5 5-5h0c2.76 0 5 2.24 5 5" stroke="#fff" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Secondary person (smaller, behind) */}
+      <circle cx="7.5" cy="9" r="1.8" fill="#fff" fillOpacity="0.6" />
+      <path d="M4 19c0-2 1.57-3.5 3.5-3.5" stroke="#fff" strokeWidth="1.2" fill="none" strokeOpacity="0.6" strokeLinecap="round" />
     </svg>
   );
 }
@@ -105,13 +143,9 @@ function ProviderLogo({ provider }: { provider: ConnectedProvider }) {
     return <LinkedInLogo />;
   }
 
-  if (
-    provider === ConnectedProvider.microsoft_outlook ||
-    provider === ConnectedProvider.microsoft_calendar ||
-    provider === ConnectedProvider.microsoft_teams
-  ) {
-    return <MicrosoftLogo />;
-  }
+  if (provider === ConnectedProvider.microsoft_outlook) return <OutlookLogo />;
+  if (provider === ConnectedProvider.microsoft_calendar) return <CalendarLogo />;
+  if (provider === ConnectedProvider.microsoft_teams) return <TeamsLogo />;
 
   return (
     <div className="flex h-6 w-6 items-center justify-center rounded-md border bg-surface-muted text-[10px] font-semibold uppercase text-muted-foreground">
