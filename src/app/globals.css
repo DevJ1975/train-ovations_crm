@@ -1,0 +1,452 @@
+@import "@blocknote/core/fonts/inter.css";
+@import "@blocknote/mantine/style.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --tv-primary: 218 100% 52%;
+    --tv-primary-foreground: 210 40% 98%;
+    --tv-accent: 25 100% 55%;
+    --tv-accent-foreground: 222 47% 11%;
+    --tv-background: 213 45% 97%;
+    --tv-surface: 0 0% 100%;
+    --tv-surface-muted: 214 35% 94%;
+    --tv-foreground: 222 47% 11%;
+    --tv-muted-foreground: 217 12% 40%;
+    --tv-border: 212 24% 88%;
+    --tv-ring: 218 100% 52%;
+    --tv-success: 144 73% 29%;
+    --tv-warning: 36 100% 36%;
+    --tv-danger: 0 57% 50%;
+  }
+
+  .dark {
+    --tv-primary: 218 100% 62%;
+    --tv-primary-foreground: 210 40% 98%;
+    --tv-accent: 25 100% 60%;
+    --tv-accent-foreground: 210 40% 98%;
+    --tv-background: 222 47% 8%;
+    --tv-surface: 222 34% 12%;
+    --tv-surface-muted: 222 28% 16%;
+    --tv-foreground: 210 40% 96%;
+    --tv-muted-foreground: 216 16% 55%;
+    --tv-border: 222 20% 22%;
+    --tv-ring: 218 100% 62%;
+    --tv-success: 144 66% 44%;
+    --tv-warning: 36 100% 52%;
+    --tv-danger: 0 72% 60%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .text-hero,
+  .text-section,
+  .text-card {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  p,
+  li,
+  input,
+  textarea,
+  button,
+  label,
+  a {
+    font-family: var(--font-sans);
+  }
+}
+
+@layer components {
+  .tv-shell {
+    @apply min-h-screen bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top left, hsl(var(--tv-primary) / 0.08), transparent 32%),
+      linear-gradient(180deg, hsl(var(--tv-surface)) 0%, hsl(var(--tv-background)) 100%);
+  }
+
+  .tv-panel {
+    @apply rounded-xl border bg-surface shadow-md;
+  }
+
+  .tv-interactive-card {
+    transition:
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .tv-interactive-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 22px 48px -24px hsl(var(--tv-foreground) / 0.2),
+      0 12px 24px -18px hsl(var(--tv-primary) / 0.2);
+    border-color: hsl(var(--tv-primary) / 0.22);
+  }
+
+  .tv-pressable {
+    transition:
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .tv-pressable:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px -18px hsl(var(--tv-foreground) / 0.24);
+  }
+
+  .tv-pressable:active {
+    transform: translateY(0) scale(0.985);
+    box-shadow: 0 8px 16px -16px hsl(var(--tv-foreground) / 0.2);
+  }
+
+  .tv-dialog-overlay {
+    animation: tv-overlay-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tv-dialog-overlay[data-state='closed'] {
+    animation: tv-overlay-out 180ms ease-in forwards;
+  }
+
+  .tv-dialog-content {
+    animation: tv-dialog-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: center;
+    will-change: opacity, transform, filter;
+  }
+
+  .tv-dialog-content[data-state='closed'] {
+    animation: tv-dialog-out 180ms ease-in forwards;
+  }
+
+  .tv-route-transition {
+    animation: tv-route-enter 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: top center;
+    will-change: opacity, transform, filter;
+  }
+
+  .tv-stagger > * {
+    animation: tv-stagger-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: opacity, transform;
+  }
+
+  .tv-stagger > *:nth-child(1) {
+    animation-delay: 70ms;
+  }
+
+  .tv-stagger > *:nth-child(2) {
+    animation-delay: 130ms;
+  }
+
+  .tv-stagger > *:nth-child(3) {
+    animation-delay: 190ms;
+  }
+
+  .tv-stagger > *:nth-child(4) {
+    animation-delay: 250ms;
+  }
+
+  .tv-stagger > *:nth-child(5) {
+    animation-delay: 310ms;
+  }
+
+  .tv-stagger-fast > * {
+    animation: tv-stagger-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: opacity, transform;
+  }
+
+  .tv-stagger-fast > *:nth-child(1) {
+    animation-delay: 40ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(2) {
+    animation-delay: 80ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(4) {
+    animation-delay: 160ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(5) {
+    animation-delay: 200ms;
+  }
+
+  .tv-card-hero {
+    @apply rounded-[2rem] border border-border/70 bg-surface p-5 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.25)] backdrop-blur sm:p-6 md:p-8;
+  }
+
+  .dark .tv-card-hero {
+    box-shadow: 0 24px 60px -40px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ── Form controls ──────────────────────────────────────── */
+  .tv-form-input {
+    @apply flex h-10 w-full rounded-xl border border-border bg-surface-muted/60 px-3 py-2 text-sm text-foreground
+           placeholder:text-muted-foreground
+           focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20
+           disabled:cursor-not-allowed disabled:opacity-50
+           transition-colors;
+  }
+
+  .tv-form-textarea {
+    @apply flex min-h-24 w-full resize-none rounded-xl border border-border bg-surface-muted/60 px-3 py-2 text-sm text-foreground
+           placeholder:text-muted-foreground
+           focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20
+           disabled:cursor-not-allowed disabled:opacity-50
+           transition-colors;
+  }
+
+  .tv-form-select {
+    @apply h-10 w-full rounded-xl border border-border bg-surface-muted/60 px-3 py-2 text-sm text-foreground
+           focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20
+           disabled:cursor-not-allowed disabled:opacity-50
+           transition-colors;
+  }
+
+  /* ── Form error / success states ────────────────────────────────────── */
+  .tv-form-input--error,
+  .tv-form-textarea--error,
+  .tv-form-select--error {
+    @apply border-danger/70 bg-danger/5 focus:border-danger/70 focus:ring-danger/20;
+  }
+
+  .tv-form-input--success,
+  .tv-form-textarea--success,
+  .tv-form-select--success {
+    @apply border-success/60 focus:border-success/60 focus:ring-success/20;
+  }
+
+  .tv-form-error-msg {
+    @apply mt-1 flex items-center gap-1 text-xs font-medium text-danger;
+  }
+
+  .tv-form-hint {
+    @apply mt-1 text-xs text-muted-foreground;
+  }
+
+  /* ── Skeleton shimmer ────────────────────────────────────────────────── */
+  .tv-skeleton {
+    @apply animate-pulse rounded-md bg-surface-muted;
+  }
+
+  /* ── Stagger support for up to 8 children ────────────────────────────── */
+  .tv-stagger > *:nth-child(6) {
+    animation-delay: 370ms;
+  }
+
+  .tv-stagger > *:nth-child(7) {
+    animation-delay: 430ms;
+  }
+
+  .tv-stagger > *:nth-child(8) {
+    animation-delay: 490ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(6) {
+    animation-delay: 240ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(7) {
+    animation-delay: 280ms;
+  }
+
+  .tv-stagger-fast > *:nth-child(8) {
+    animation-delay: 320ms;
+  }
+
+}
+
+@keyframes tv-route-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.992);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes tv-stagger-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tv-overlay-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tv-overlay-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tv-dialog-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.985);
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes tv-dialog-out {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.985);
+    filter: blur(6px);
+  }
+}
+
+/* ─── Weather widget animations ──────────────────────────────────────────── */
+
+@keyframes w-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes w-bob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-3px); }
+}
+
+@keyframes w-drift {
+  0%, 100% { transform: translateX(0px); }
+  50%       { transform: translateX(2.5px); }
+}
+
+@keyframes w-rain {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(9px); opacity: 0; }
+}
+
+@keyframes w-snow {
+  0%   { transform: translateY(-6px) translateX(0px); opacity: 0; }
+  20%  { opacity: 1; }
+  55%  { transform: translateY(2px) translateX(3px); }
+  100% { transform: translateY(8px) translateX(0px); opacity: 0; }
+}
+
+@keyframes w-flash {
+  0%, 80%, 100% { opacity: 1; }
+  83%, 94%      { opacity: 0.1; }
+}
+
+@keyframes w-fog-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.9; }
+}
+
+@keyframes w-twinkle {
+  0%, 100% { opacity: 1;    transform: scale(1);   }
+  50%       { opacity: 0.15; transform: scale(0.4); }
+}
+
+/* ─── Journal BlockNote editor ───────────────────────────────────────────── */
+
+/*
+  Give the editor a real note-taking height.
+  .bn-editor is the ProseMirror root rendered by BlockNoteView.
+  min-height here means the editor always shows ~8 lines before it starts
+  scrolling the page naturally.
+*/
+.journal-editor-body .bn-editor {
+  min-height: 260px;
+  padding-block: 0.875rem;
+}
+
+/*
+  BlockNote's slash-command Popover dropdown uses position:absolute.
+  We need to ensure it paints above sibling content (Save button, past
+  entries) and above any stacking-context boundaries created by
+  will-change:transform on .tv-stagger children.
+
+  --mantine-z-index-popover is 300 by default; we escalate to 400
+  (above overlays at 300, below modals at 200 which is lower anyway).
+*/
+.journal-editor-shell .mantine-Popover-dropdown {
+  z-index: 400;
+}
+
+/*
+  Safety net: if the popover escapes the shell (e.g. portal mode),
+  the bn-mantine wrapper still carries the right z-index.
+*/
+.bn-mantine .bn-suggestion-menu {
+  z-index: 400;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-route-transition {
+    animation: none;
+  }
+
+  .tv-interactive-card,
+  .tv-pressable,
+  .tv-dialog-overlay,
+  .tv-dialog-content {
+    animation: none;
+    transition: none;
+  }
+
+  .tv-stagger > *,
+  .tv-stagger-fast > * {
+    animation: none;
+  }
+}

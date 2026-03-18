@@ -1,0 +1,2164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  super_admin
+  sales_manager
+  sales_rep
+}
+
+enum LeadStatus {
+  new
+  contacted
+  qualified
+  proposal
+  won
+  lost
+}
+
+enum SocialPlatform {
+  linkedin
+  x
+  instagram
+  facebook
+  youtube
+  custom
+}
+
+enum SourceType {
+  landing_page
+  manual
+  import
+  referral
+}
+
+enum ActivityLogType {
+  lead_created
+  lead_duplicate_detected
+  lead_note_added
+  lead_status_changed
+  rep_profile_created
+  rep_profile_updated
+  landing_page_created
+  meeting_processed
+  meeting_note_created
+  meeting_follow_up_drafted
+  linkedin_profile_linked
+  profile_match_confirmed
+  employment_snapshot_refreshed
+  employment_title_changed
+  employment_company_changed
+  champion_moved_companies
+  champion_flag_updated
+  watchlist_updated
+  relationship_milestone_recorded
+  relationship_edge_recorded
+  career_movement_alert_created
+  expansion_opportunity_detected
+  rep_action_prompt_created
+}
+
+enum ConnectedProvider {
+  google_auth
+  google_gmail
+  google_calendar
+  google_drive
+  zoom
+  notion
+  linkedin
+  microsoft_outlook
+  microsoft_calendar
+  microsoft_teams
+}
+
+enum ConnectedAccountType {
+  oauth
+  api_token
+  service_account
+}
+
+enum ConnectionStatus {
+  pending
+  connected
+  disconnected
+  expired
+  error
+}
+
+enum SyncStatus {
+  idle
+  pending
+  syncing
+  success
+  error
+  disabled
+}
+
+enum MeetingStatus {
+  scheduled
+  completed
+  canceled
+  processing
+}
+
+enum MeetingArtifactType {
+  recording
+  transcript
+  chat
+  note
+  summary
+  drive_link
+}
+
+enum MeetingArtifactStatus {
+  pending
+  available
+  missing
+  failed
+  linked
+}
+
+enum WebhookEventStatus {
+  received
+  verified
+  processed
+  failed
+  ignored
+}
+
+enum AutomationJobType {
+  zoom_meeting_ingest
+  call_summary_generation
+  action_item_extraction
+  crm_note_sync
+  calendar_follow_up
+  notion_sync
+  meeting_note_creation
+  follow_up_email_draft
+  drive_artifact_link
+}
+
+enum AutomationJobStatus {
+  queued
+  running
+  completed
+  failed
+  skipped
+}
+
+enum CallSummaryStatus {
+  pending
+  generated
+  failed
+}
+
+enum ActionItemStatus {
+  open
+  done
+  dismissed
+}
+
+enum NoteDestinationType {
+  notion_page
+  notion_database
+  crm_note
+}
+
+enum LeadNoteSourceType {
+  user_authored
+  ai_generated
+  system_generated
+}
+
+enum NoteTemplateType {
+  blank
+  meeting_notes
+  account_brief
+  follow_up_plan
+}
+
+enum ProposalStatus {
+  draft
+  sent
+  viewed
+  accepted
+  signed
+  partially_paid
+  paid
+  declined
+  expired
+}
+
+enum ProposalBlockType {
+  hero
+  rich_text
+  image
+  gallery
+  video_embed
+  testimonial
+  problem_solution
+  deliverables
+  scope
+  timeline
+  faq
+  pricing_table
+  package_selector
+  add_ons
+  roi_value
+  cta
+  signature
+  payment
+  scheduling
+}
+
+enum ProposalPaymentType {
+  none
+  full
+  deposit
+}
+
+enum ProposalEventType {
+  viewed
+  section_viewed
+  package_selected
+  addon_toggled
+  signed
+  accepted
+  payment_initiated
+  payment_completed
+  declined
+  link_clicked
+  scheduling_opened
+}
+
+enum EmailDraftStatus {
+  draft
+  reviewed
+  approved
+  sent
+  archived
+}
+
+enum EmailDraftType {
+  follow_up
+  proposal
+  check_in
+  custom
+}
+
+enum MeetingParticipantRole {
+  host
+  internal_rep
+  external_attendee
+  unknown
+}
+
+enum ExternalProfileProvider {
+  linkedin
+  manual
+  third_party
+  internal_ai
+}
+
+enum ProfileSourceType {
+  official_linkedin
+  user_provided
+  third_party_enrichment
+  ai_inference
+}
+
+enum LinkedInProfileLinkStatus {
+  active
+  unresolved
+  broken
+  stale
+}
+
+enum ProfileMatchStatus {
+  suggested
+  confirmed
+  rejected
+}
+
+enum EmploymentChangeType {
+  title_changed
+  company_changed
+  departed_prior_employer
+  stale_profile_data
+  broken_profile_link
+  promoted_internally
+  moved_to_target_account
+  moved_from_client_to_prospect
+  moved_from_prospect_to_competitor
+  moved_to_strategic_account
+}
+
+enum RelationshipStage {
+  current
+  historical
+  champion
+  former_champion
+}
+
+enum AlertPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+enum AlertStatus {
+  open
+  dismissed
+  resolved
+}
+
+enum WatchlistPriority {
+  normal
+  high
+  critical
+}
+
+enum ChampionStatus {
+  active
+  former
+  at_risk
+  moved
+  lost
+  archived
+}
+
+enum ChampionPriority {
+  low
+  medium
+  high
+  strategic
+}
+
+enum WatchlistCategory {
+  strategic_contact
+  former_champion
+  target_company_mover
+  high_value_prospect
+  dormant_contact
+}
+
+enum RecordOriginType {
+  system_generated
+  user_input
+  external_source
+  ai_generated
+}
+
+enum RelationshipMilestoneType {
+  meeting
+  deal
+  note
+  employment_change
+  promotion
+  client_association
+  champion_status
+  watchlist_added
+  manual_note
+}
+
+enum CompanyAssociationType {
+  current_employer
+  previous_employer
+  client_account
+  former_client
+  prospect_account
+  competitor_account
+  target_account
+  strategic_account
+}
+
+enum AccountStatus {
+  prospect
+  active_customer
+  inactive_customer
+  partner
+  archived
+}
+
+enum OpportunityStage {
+  prospecting
+  discovery
+  demo
+  proposal
+  negotiation
+  closed_won
+  closed_lost
+}
+
+enum MailboxProvider {
+  gmail
+  outlook
+  imap
+  exchange
+  other
+}
+
+enum MailboxConnectionStatus {
+  pending
+  connected
+  disconnected
+  error
+}
+
+enum EmailThreadStatus {
+  open
+  archived
+  snoozed
+}
+
+enum EmailMessageDirection {
+  inbound
+  outbound
+}
+
+enum ContactAssociationStatus {
+  active
+  historical
+  prospective
+  inactive
+}
+
+enum ExpansionOpportunityType {
+  reentry
+  expansion
+  warm_introduction
+  recovery
+  named_account
+  strategic_account
+}
+
+enum ExpansionOpportunityStatus {
+  open
+  reviewed
+  dismissed
+  converted
+  archived
+}
+
+enum RepActionPromptType {
+  reconnect
+  congratulate
+  introduce_trainovations
+  schedule_discovery
+  revive_conversation
+  update_relationship_notes
+  notify_manager
+}
+
+enum RepActionPromptStatus {
+  open
+  acknowledged
+  dismissed
+  completed
+}
+
+enum RelationshipEdgeType {
+  rep_to_contact
+  contact_to_company
+  company_transition
+  champion_to_account
+  watchlist_to_contact
+}
+
+enum OutreachDraftStatus {
+  generated
+  reviewed
+  edited
+  approved
+  archived
+  sent
+}
+
+enum OutreachDraftType {
+  lead_follow_up
+  post_meeting_follow_up
+  reconnect
+  congratulatory
+  reentry
+  champion_recovery
+  proposal_reminder
+}
+
+enum BriefStatus {
+  generated
+  reviewed
+  edited
+  approved
+  archived
+}
+
+enum BriefType {
+  account
+  contact
+}
+
+enum PriorityEntityType {
+  lead
+  account
+  contact
+  opportunity
+}
+
+enum PriorityBand {
+  critical
+  high
+  medium
+  low
+}
+
+enum RepTaskSuggestionType {
+  send_follow_up
+  reconnect_contact
+  review_account_brief
+  update_champion_status
+  schedule_check_in
+  send_proposal_reminder
+  revive_opportunity
+  verify_company_change
+}
+
+enum RepTaskSuggestionStatus {
+  generated
+  acknowledged
+  dismissed
+  converted
+  archived
+}
+
+model User {
+  id              String        @id @default(cuid())
+  name            String
+  email           String        @unique
+  passwordHash    String?
+  imageUrl        String?
+  role            UserRole
+  isActive        Boolean       @default(true)
+  mustChangePassword Boolean    @default(false)
+  invitedByUserId String?
+  invitationSentAt DateTime?
+  invitationAcceptedAt DateTime?
+  lastLoginAt     DateTime?
+  deactivatedAt   DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  repProfile      RepProfile?
+  authoredNotes   LeadNote[]
+  activityEntries ActivityLog[] @relation("ActivityActor")
+  connectedAccounts ConnectedAccount[]
+  managedRepProfiles RepProfile[] @relation("RepManager")
+  invitedBy       User?         @relation("RepInviter", fields: [invitedByUserId], references: [id], onDelete: SetNull)
+  invitedUsers    User[]        @relation("RepInviter")
+  calendarEvents  CalendarEvent[]
+  meetings        Meeting[]
+  automationJobs  AutomationJob[]
+  notionSyncRecords NotionSyncRecord[]
+  emailDrafts     EmailDraft[]
+  emailMailboxes  EmailMailbox[]
+  generatedOutreachDrafts OutreachDraft[]      @relation("OutreachDraftGenerator")
+  editedOutreachDrafts    OutreachDraft[]      @relation("OutreachDraftEditor")
+  briefGenerationRuns     BriefGenerationRun[] @relation("BriefRunActor")
+  webhookEndpoints        WebhookEndpoint[]
+
+  @@index([invitedByUserId])
+}
+
+model OrganizationSettings {
+  id                String     @id @default(cuid())
+  name              String
+  website           String?
+  supportEmail      String?
+  supportPhone      String?
+  defaultLeadSource SourceType @default(landing_page)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+}
+
+model RepProfile {
+  id               String               @id @default(cuid())
+  userId           String               @unique
+  managerUserId    String?
+  slug             String               @unique
+  firstName        String
+  lastName         String
+  displayName      String
+  title            String
+  bio              String
+  photoUrl         String?
+  pushToken        String?
+  email            String
+  phone            String?
+  website          String?
+  location         String?
+  isActive              Boolean   @default(true)
+  onboardingComplete    Boolean   @default(false)
+  bookingEnabled        Boolean   @default(false)
+  bookingTitle          String?
+  bookingDuration       Int       @default(30)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  managerUser      User?                @relation("RepManager", fields: [managerUserId], references: [id], onDelete: SetNull)
+  signatureProfile RepSignatureProfile?
+  socialLinks      RepSocialLink[]
+  landingPages     LandingPage[]
+  ownedLeads       Lead[]               @relation("LeadOwner")
+  activityEntries  ActivityLog[]        @relation("RepActivity")
+  meetings         Meeting[]
+  emailDrafts      EmailDraft[]
+  relationshipHistory RelationshipHistory[]
+  championFlagsOwned ChampionFlag[]     @relation("ChampionOwner")
+  relationshipMilestones RelationshipMilestone[]
+  expansionOpportunitySignals ExpansionOpportunitySignal[]
+  repActionPrompts RepActionPrompt[]
+  relationshipEdges RelationshipEdge[]
+  outreachDrafts    OutreachDraft[]
+  accountBriefs     AccountBrief[]
+  contactBriefs     ContactBrief[]
+  priorityScores    PriorityScore[]
+  repTaskSuggestions RepTaskSuggestion[]
+  briefGenerationRuns BriefGenerationRun[]
+  draftGenerationContexts DraftGenerationContext[]
+  ownedAccounts      Account[]             @relation("AccountOwner")
+  ownedOpportunities Opportunity[]         @relation("OpportunityOwner")
+  emailThreads       EmailThread[]
+  journalEntries     RepJournalEntry[]
+  repNotes           RepNote[]
+  proposals          Proposal[]
+  expenses           Expense[]
+  quotas             RepQuota[]
+  followUpSequences  FollowUpSequence[]
+  bookings           Booking[]
+
+  @@index([managerUserId])
+}
+
+model RepSignatureProfile {
+  id             String     @id @default(cuid())
+  repProfileId   String     @unique
+  companyName    String
+  jobTitle       String?
+  primaryPhone   String?
+  secondaryPhone String?
+  email          String?
+  website        String?
+  linkedinUrl    String?
+  calendarUrl    String?
+  address        String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  repProfile     RepProfile @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+}
+
+model RepSocialLink {
+  id           String         @id @default(cuid())
+  repProfileId String
+  platform     SocialPlatform
+  label        String
+  url          String
+  sortOrder    Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  repProfile   RepProfile     @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+}
+
+enum ExpenseCategory {
+  meals
+  travel
+  lodging
+  entertainment
+  supplies
+  software
+  marketing
+  other
+}
+
+model Expense {
+  id           String          @id @default(cuid())
+  repProfileId String
+  amount       Float
+  currency     String          @default("USD")
+  vendor       String?
+  category     ExpenseCategory @default(other)
+  date         DateTime        @default(now())
+  notes        String?
+  receiptUrl   String?
+  ocrRaw       Json?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  repProfile   RepProfile      @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+
+  @@index([repProfileId])
+}
+
+model LandingPage {
+  id              String     @id @default(cuid())
+  repProfileId    String
+  slug            String     @unique
+  title           String
+  headline        String
+  subheadline     String?
+  heroCtaText     String     @default("Save Contact")
+  metaTitle       String?
+  metaDescription String?
+  isPublished     Boolean    @default(true)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  repProfile      RepProfile @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+  leads           Lead[]
+}
+
+model Lead {
+  id                String        @id @default(cuid())
+  repProfileId      String?
+  landingPageId     String?
+  firstName         String
+  lastName          String
+  company           String?
+  jobTitle          String?
+  email             String
+  phone             String?
+  location          String?
+  industry          String?
+  interest          String?
+  notes             String?
+  consent           Boolean
+  status            LeadStatus    @default(new)
+  sourceType        SourceType    @default(landing_page)
+  queryParams       Json?
+  duplicateOfLeadId String?
+  submittedAt       DateTime      @default(now())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  repProfile        RepProfile?   @relation("LeadOwner", fields: [repProfileId], references: [id], onDelete: SetNull)
+  landingPage       LandingPage?  @relation(fields: [landingPageId], references: [id], onDelete: SetNull)
+  duplicateOfLead   Lead?         @relation("LeadDuplicates", fields: [duplicateOfLeadId], references: [id], onDelete: SetNull)
+  duplicateLeads    Lead[]        @relation("LeadDuplicates")
+  notesList         LeadNote[]
+  activityEntries   ActivityLog[] @relation("LeadActivity")
+  meetings          Meeting[]
+  emailDrafts       EmailDraft[]
+  actionItems       ActionItem[]
+  linkedInProfileLinks LinkedInProfileLink[]
+  employmentSnapshots EmploymentSnapshot[]
+  employmentChangeEvents EmploymentChangeEvent[]
+  profileMatchCandidates ProfileMatchCandidate[]
+  relationshipHistory RelationshipHistory[]
+  championFlag       ChampionFlag?
+  contactWatchlist   ContactWatchlist?
+  careerMovementAlerts CareerMovementAlert[]
+  relationshipMilestones RelationshipMilestone[]
+  contactCompanyAssociations ContactCompanyAssociation[]
+  expansionOpportunitySignals ExpansionOpportunitySignal[]
+  repActionPrompts RepActionPrompt[]
+  relationshipEdges RelationshipEdge[]
+  outreachDrafts       OutreachDraft[]
+  accountBriefs        AccountBrief[]
+  contactBriefs        ContactBrief[]
+  priorityScores       PriorityScore[]
+  repTaskSuggestions   RepTaskSuggestion[]
+  draftGenerationContexts DraftGenerationContext[]
+  briefGenerationRuns  BriefGenerationRun[]
+  accountLinks         AccountContact[]
+  primaryOpportunities Opportunity[]       @relation("OpportunityPrimaryLead")
+  emailThreads         EmailThread[]
+  repNotes             RepNote[]           @relation("LeadRepNotes")
+  proposals            Proposal[]          @relation("LeadProposals")
+  followUpEnrollments  FollowUpEnrollment[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([repProfileId, status])
+}
+
+model Account {
+  id               String        @id @default(cuid())
+  name             String
+  domain           String?
+  industry         String?
+  status           AccountStatus @default(prospect)
+  ownerRepProfileId String?
+  description      String?
+  hqLocation       String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  ownerRepProfile  RepProfile?   @relation("AccountOwner", fields: [ownerRepProfileId], references: [id], onDelete: SetNull)
+  contacts         AccountContact[]
+  opportunities    Opportunity[]
+  emailThreads     EmailThread[]
+  repNotes         RepNote[]        @relation("AccountRepNotes")
+  proposals        Proposal[]       @relation("AccountProposals")
+
+  @@index([ownerRepProfileId, status])
+  @@index([name])
+  @@index([domain])
+}
+
+model AccountContact {
+  id                String    @id @default(cuid())
+  accountId         String
+  leadId            String
+  relationshipLabel String?
+  isPrimary         Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  account           Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lead              Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, leadId])
+  @@index([leadId])
+}
+
+model Opportunity {
+  id               String           @id @default(cuid())
+  accountId        String
+  ownerRepProfileId String?
+  primaryLeadId    String?
+  name             String
+  stage            OpportunityStage @default(prospecting)
+  amountCents      Int?
+  currency         String           @default("USD")
+  targetCloseDate  DateTime?
+  closeDate        DateTime?
+  description      String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  account          Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  ownerRepProfile  RepProfile?      @relation("OpportunityOwner", fields: [ownerRepProfileId], references: [id], onDelete: SetNull)
+  primaryLead      Lead?            @relation("OpportunityPrimaryLead", fields: [primaryLeadId], references: [id], onDelete: SetNull)
+  emailThreads     EmailThread[]
+  repNotes         RepNote[]        @relation("OpportunityRepNotes")
+  proposals        Proposal[]       @relation("OpportunityProposals")
+
+  @@index([accountId, stage])
+  @@index([ownerRepProfileId, stage])
+  @@index([primaryLeadId])
+}
+
+model EmailMailbox {
+  id                 String                  @id @default(cuid())
+  userId             String
+  connectedAccountId String?
+  provider           MailboxProvider
+  connectionStatus   MailboxConnectionStatus @default(pending)
+  label              String
+  emailAddress       String
+  syncEnabled        Boolean                 @default(true)
+  lastSyncedAt       DateTime?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectedAccount   ConnectedAccount?       @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  threads            EmailThread[]
+
+  @@unique([userId, emailAddress])
+  @@index([userId, connectionStatus])
+}
+
+model EmailThread {
+  id               String            @id @default(cuid())
+  mailboxId        String
+  repProfileId     String?
+  leadId           String?
+  accountId        String?
+  opportunityId    String?
+  providerThreadId String?
+  subject          String
+  snippet          String?
+  participants     Json?
+  unreadCount      Int               @default(0)
+  status           EmailThreadStatus @default(open)
+  awaitingReply    Boolean           @default(false)
+  followUpNeeded   Boolean           @default(false)
+  snoozedUntil     DateTime?
+  lastMessageAt    DateTime
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  mailbox          EmailMailbox      @relation(fields: [mailboxId], references: [id], onDelete: Cascade)
+  repProfile       RepProfile?       @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead             Lead?             @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  account          Account?          @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  opportunity      Opportunity?      @relation(fields: [opportunityId], references: [id], onDelete: SetNull)
+  messages         EmailMessage[]
+
+  @@index([mailboxId, lastMessageAt])
+  @@index([repProfileId, lastMessageAt])
+  @@index([leadId, lastMessageAt])
+  @@index([accountId, lastMessageAt])
+}
+
+model EmailMessage {
+  id                String                @id @default(cuid())
+  threadId          String
+  providerMessageId String?
+  direction         EmailMessageDirection
+  subject           String?
+  snippet           String?
+  bodyText          String
+  fromEmail         String
+  toEmails          String[]
+  ccEmails          String[]              @default([])
+  isRead            Boolean               @default(false)
+  sentAt            DateTime
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  thread            EmailThread           @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, sentAt])
+}
+
+model LeadNote {
+  id            String             @id @default(cuid())
+  leadId        String
+  authorId      String?
+  meetingId     String?
+  callSummaryId String?
+  sourceType    LeadNoteSourceType @default(user_authored)
+  content       String
+  metadata      Json?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  lead          Lead               @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author        User?              @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  meeting       Meeting?           @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  callSummary   CallSummary?       @relation(fields: [callSummaryId], references: [id], onDelete: SetNull)
+}
+
+model ActivityLog {
+  id           String          @id @default(cuid())
+  type         ActivityLogType
+  description  String
+  actorUserId  String?
+  repProfileId String?
+  leadId       String?
+  metadata     Json?
+  createdAt    DateTime        @default(now())
+  actorUser    User?           @relation("ActivityActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  repProfile   RepProfile?     @relation("RepActivity", fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead         Lead?           @relation("LeadActivity", fields: [leadId], references: [id], onDelete: SetNull)
+}
+
+model ExternalProfileSource {
+  id              String                  @id @default(cuid())
+  provider        ExternalProfileProvider
+  sourceType      ProfileSourceType
+  label           String
+  description     String?
+  isOfficial      Boolean                 @default(false)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+  linkedInProfileLinks LinkedInProfileLink[]
+  employmentSnapshots EmploymentSnapshot[]
+  profileMatchCandidates ProfileMatchCandidate[]
+  employmentChangeEvents EmploymentChangeEvent[]
+  relationshipHistory RelationshipHistory[]
+  careerMovementAlerts CareerMovementAlert[]
+  relationshipMilestones RelationshipMilestone[]
+  contactCompanyAssociations ContactCompanyAssociation[]
+}
+
+model LinkedInProfileLink {
+  id                    String                  @id @default(cuid())
+  leadId                String
+  externalProfileSourceId String?
+  profileUrl            String
+  normalizedProfileUrl  String
+  memberId              String?
+  publicIdentifier      String?
+  headline              String?
+  location              String?
+  sourceType            ProfileSourceType
+  status                LinkedInProfileLinkStatus @default(active)
+  confidenceScore       Float                   @default(0.5)
+  humanConfirmed        Boolean                 @default(false)
+  officialData          Boolean                 @default(false)
+  lastCheckedAt         DateTime?
+  lastConfirmedAt       DateTime?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  lead                  Lead                    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  externalProfileSource ExternalProfileSource?  @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  employmentSnapshots   EmploymentSnapshot[]
+  employmentChangeEvents EmploymentChangeEvent[]
+  careerMovementAlerts  CareerMovementAlert[]
+  relationshipHistory   RelationshipHistory[]
+
+  @@unique([leadId, normalizedProfileUrl])
+  @@index([normalizedProfileUrl])
+}
+
+model EmploymentSnapshot {
+  id                    String                 @id @default(cuid())
+  leadId                String
+  linkedInProfileLinkId String?
+  externalProfileSourceId String?
+  title                 String
+  companyName           String
+  startDate             DateTime?
+  endDate               DateTime?
+  isCurrent             Boolean                @default(true)
+  companyPageUrl        String?
+  profileUrl            String?
+  sourceType            ProfileSourceType
+  confidenceScore       Float                  @default(0.5)
+  retrievedAt           DateTime
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  metadata              Json?
+  lead                  Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  linkedInProfileLink   LinkedInProfileLink?   @relation(fields: [linkedInProfileLinkId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource? @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  priorChangeEvents     EmploymentChangeEvent[] @relation("PriorEmploymentSnapshot")
+  currentChangeEvents   EmploymentChangeEvent[] @relation("CurrentEmploymentSnapshot")
+
+  @@index([leadId, retrievedAt])
+}
+
+model EmploymentChangeEvent {
+  id                    String                 @id @default(cuid())
+  leadId                String
+  linkedInProfileLinkId String?
+  externalProfileSourceId String?
+  priorSnapshotId       String?
+  currentSnapshotId     String?
+  changeType            EmploymentChangeType
+  titleFrom             String?
+  titleTo               String?
+  companyFrom           String?
+  companyTo             String?
+  confidenceScore       Float                  @default(0.5)
+  detectedAt            DateTime               @default(now())
+  metadata              Json?
+  lead                  Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  linkedInProfileLink   LinkedInProfileLink?   @relation(fields: [linkedInProfileLinkId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource? @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  priorSnapshot         EmploymentSnapshot?    @relation("PriorEmploymentSnapshot", fields: [priorSnapshotId], references: [id], onDelete: SetNull)
+  currentSnapshot       EmploymentSnapshot?    @relation("CurrentEmploymentSnapshot", fields: [currentSnapshotId], references: [id], onDelete: SetNull)
+  careerMovementAlerts  CareerMovementAlert[]
+  expansionOpportunitySignals ExpansionOpportunitySignal[]
+
+  @@index([leadId, detectedAt])
+}
+
+model ProfileMatchCandidate {
+  id                    String                 @id @default(cuid())
+  leadId                String
+  externalProfileSourceId String?
+  profileUrl            String
+  normalizedProfileUrl  String
+  memberId              String?
+  fullName              String
+  title                 String?
+  companyName           String?
+  location              String?
+  sourceType            ProfileSourceType
+  matchStatus           ProfileMatchStatus     @default(suggested)
+  confidenceScore       Float                  @default(0.5)
+  humanReviewed         Boolean                @default(false)
+  confirmedAt           DateTime?
+  rejectedAt            DateTime?
+  matchingSignals       Json?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  lead                  Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  externalProfileSource ExternalProfileSource? @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+
+  @@index([leadId, matchStatus])
+}
+
+model RelationshipHistory {
+  id                    String                 @id @default(cuid())
+  leadId                String
+  repProfileId          String?
+  linkedInProfileLinkId String?
+  externalProfileSourceId String?
+  companyName           String
+  title                 String?
+  stage                 RelationshipStage      @default(current)
+  startDate             DateTime?
+  endDate               DateTime?
+  confidenceScore       Float                  @default(0.5)
+  sourceType            ProfileSourceType
+  originType            RecordOriginType       @default(external_source)
+  notes                 String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  lead                  Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  repProfile            RepProfile?            @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  linkedInProfileLink   LinkedInProfileLink?   @relation(fields: [linkedInProfileLinkId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource? @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  milestones            RelationshipMilestone[]
+  relationshipEdges     RelationshipEdge[]
+
+  @@index([leadId, stage, startDate])
+}
+
+model ChampionFlag {
+  id              String    @id @default(cuid())
+  leadId          String    @unique
+  isActive        Boolean   @default(true)
+  ownerRepProfileId String?
+  priority        ChampionPriority @default(medium)
+  status          ChampionStatus @default(active)
+  rationale       String?
+  notes           String?
+  confidenceScore Float     @default(0.5)
+  originType      RecordOriginType @default(user_input)
+  lastStatusChangedAt DateTime @default(now())
+  metadata        Json?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lead            Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  ownerRepProfile RepProfile? @relation("ChampionOwner", fields: [ownerRepProfileId], references: [id], onDelete: SetNull)
+  companyAssociations ContactCompanyAssociation[]
+}
+
+model ContactWatchlist {
+  id                        String           @id @default(cuid())
+  leadId                    String           @unique
+  isActive                  Boolean          @default(true)
+  category                  WatchlistCategory @default(strategic_contact)
+  priority                  WatchlistPriority @default(normal)
+  reason                    String?
+  notifyOnEmploymentChange  Boolean          @default(true)
+  notifyOnTitleChange       Boolean          @default(true)
+  notifyOnBrokenLink        Boolean          @default(true)
+  notifyOnStaleData         Boolean          @default(true)
+  notifyOnTargetCompanyMatch Boolean         @default(true)
+  originType                RecordOriginType @default(user_input)
+  lastEvaluatedAt           DateTime?
+  metadata                  Json?
+  createdAt                 DateTime         @default(now())
+  updatedAt                 DateTime         @updatedAt
+  lead                      Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+
+model CareerMovementAlert {
+  id                    String                 @id @default(cuid())
+  leadId                String
+  linkedInProfileLinkId String?
+  externalProfileSourceId String?
+  employmentChangeEventId String?
+  priority              AlertPriority          @default(medium)
+  status                AlertStatus            @default(open)
+  title                 String
+  message               String
+  suggestedNextStep     String?
+  confidenceScore       Float                  @default(0.5)
+  originType            RecordOriginType       @default(system_generated)
+  triggeredAt           DateTime               @default(now())
+  resolvedAt            DateTime?
+  metadata              Json?
+  lead                  Lead                   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  linkedInProfileLink   LinkedInProfileLink?   @relation(fields: [linkedInProfileLinkId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource? @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  employmentChangeEvent EmploymentChangeEvent? @relation(fields: [employmentChangeEventId], references: [id], onDelete: SetNull)
+  expansionOpportunitySignals ExpansionOpportunitySignal[]
+  repActionPrompts      RepActionPrompt[]
+  repTaskSuggestions    RepTaskSuggestion[]
+
+  @@index([leadId, status, triggeredAt])
+}
+
+model RelationshipMilestone {
+  id                    String                  @id @default(cuid())
+  leadId                String
+  repProfileId          String?
+  relationshipHistoryId String?
+  externalProfileSourceId String?
+  milestoneType         RelationshipMilestoneType
+  title                 String
+  description           String?
+  occurredAt            DateTime
+  sourceType            ProfileSourceType?
+  originType            RecordOriginType        @default(system_generated)
+  confidenceScore       Float                   @default(0.5)
+  metadata              Json?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  lead                  Lead                    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  repProfile            RepProfile?             @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  relationshipHistory   RelationshipHistory?    @relation(fields: [relationshipHistoryId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource?  @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+
+  @@index([leadId, occurredAt])
+}
+
+model ContactCompanyAssociation {
+  id                    String                  @id @default(cuid())
+  leadId                String
+  championFlagId        String?
+  externalProfileSourceId String?
+  companyName           String
+  companyDomain         String?
+  companyLinkedInUrl    String?
+  associationType       CompanyAssociationType
+  status                ContactAssociationStatus @default(active)
+  isCurrent             Boolean                 @default(false)
+  isStrategic           Boolean                 @default(false)
+  sourceType            ProfileSourceType?
+  originType            RecordOriginType        @default(system_generated)
+  confidenceScore       Float                   @default(0.5)
+  startDate             DateTime?
+  endDate               DateTime?
+  lastVerifiedAt        DateTime?
+  metadata              Json?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  lead                  Lead                    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  championFlag          ChampionFlag?           @relation(fields: [championFlagId], references: [id], onDelete: SetNull)
+  externalProfileSource ExternalProfileSource?  @relation(fields: [externalProfileSourceId], references: [id], onDelete: SetNull)
+  expansionOpportunitySignals ExpansionOpportunitySignal[]
+  relationshipEdges     RelationshipEdge[]
+
+  @@index([leadId, companyName, associationType])
+}
+
+model ExpansionOpportunitySignal {
+  id                       String                    @id @default(cuid())
+  leadId                   String
+  repProfileId             String?
+  careerMovementAlertId    String?
+  contactCompanyAssociationId String?
+  employmentChangeEventId  String?
+  opportunityType          ExpansionOpportunityType
+  status                   ExpansionOpportunityStatus @default(open)
+  priority                 AlertPriority             @default(medium)
+  companyName              String
+  title                    String
+  summary                  String
+  suggestedNextStep        String?
+  rationale                String?
+  confidenceScore          Float                     @default(0.5)
+  originType               RecordOriginType          @default(system_generated)
+  metadata                 Json?
+  reviewedAt               DateTime?
+  resolvedAt               DateTime?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  lead                     Lead                      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  repProfile               RepProfile?               @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  careerMovementAlert      CareerMovementAlert?      @relation(fields: [careerMovementAlertId], references: [id], onDelete: SetNull)
+  contactCompanyAssociation ContactCompanyAssociation? @relation(fields: [contactCompanyAssociationId], references: [id], onDelete: SetNull)
+  employmentChangeEvent    EmploymentChangeEvent?    @relation(fields: [employmentChangeEventId], references: [id], onDelete: SetNull)
+  repActionPrompts         RepActionPrompt[]
+  repTaskSuggestions       RepTaskSuggestion[]
+
+  @@index([leadId, status, priority, createdAt])
+}
+
+model RepActionPrompt {
+  id                        String               @id @default(cuid())
+  leadId                    String
+  repProfileId              String?
+  careerMovementAlertId     String?
+  expansionOpportunitySignalId String?
+  promptType                RepActionPromptType
+  status                    RepActionPromptStatus @default(open)
+  priority                  AlertPriority        @default(medium)
+  title                     String
+  message                   String
+  suggestedAction           String?
+  dueAt                     DateTime?
+  originType                RecordOriginType     @default(system_generated)
+  confidenceScore           Float                @default(0.5)
+  metadata                  Json?
+  generatedAt               DateTime             @default(now())
+  actedOnAt                 DateTime?
+  createdAt                 DateTime             @default(now())
+  updatedAt                 DateTime             @updatedAt
+  lead                      Lead                 @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  repProfile                RepProfile?          @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  careerMovementAlert       CareerMovementAlert? @relation(fields: [careerMovementAlertId], references: [id], onDelete: SetNull)
+  expansionOpportunitySignal ExpansionOpportunitySignal? @relation(fields: [expansionOpportunitySignalId], references: [id], onDelete: SetNull)
+  repTaskSuggestions        RepTaskSuggestion[]
+
+  @@index([leadId, status, priority, generatedAt])
+}
+
+model RelationshipEdge {
+  id                        String                @id @default(cuid())
+  leadId                    String
+  repProfileId              String?
+  contactCompanyAssociationId String?
+  relationshipHistoryId     String?
+  edgeType                  RelationshipEdgeType
+  label                     String
+  sourceType                ProfileSourceType?
+  originType                RecordOriginType      @default(system_generated)
+  confidenceScore           Float                 @default(0.5)
+  strengthScore             Float                 @default(0.5)
+  isConfirmed               Boolean               @default(false)
+  metadata                  Json?
+  createdAt                 DateTime              @default(now())
+  updatedAt                 DateTime              @updatedAt
+  lead                      Lead                  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  repProfile                RepProfile?           @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  contactCompanyAssociation ContactCompanyAssociation? @relation(fields: [contactCompanyAssociationId], references: [id], onDelete: SetNull)
+  relationshipHistory       RelationshipHistory?  @relation(fields: [relationshipHistoryId], references: [id], onDelete: SetNull)
+
+  @@index([leadId, edgeType, createdAt])
+}
+
+model ConnectedAccount {
+  id                    String               @id @default(cuid())
+  userId                String
+  provider              ConnectedProvider
+  providerAccountId     String
+  accountType           ConnectedAccountType @default(oauth)
+  connectionStatus      ConnectionStatus     @default(pending)
+  displayName           String?
+  accountEmail          String?
+  accessToken           String?
+  refreshToken          String?
+  tokenType             String?
+  scopes                String[]
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  lastRefreshedAt       DateTime?
+  lastSyncedAt          DateTime?
+  syncEnabled           Boolean              @default(false)
+  automationEnabled     Boolean              @default(false)
+  providerMetadata      Json?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  calendarEvents        CalendarEvent[]
+  meetings              Meeting[]
+  automationJobs        AutomationJob[]
+  notionSyncRecords     NotionSyncRecord[]
+  webhookEvents         WebhookEvent[]
+  emailDrafts           EmailDraft[]
+  emailMailboxes        EmailMailbox[]
+
+  @@unique([provider, providerAccountId])
+  @@unique([userId, provider])
+}
+
+model CalendarEvent {
+  id                 String            @id @default(cuid())
+  userId             String
+  connectedAccountId String?
+  provider           ConnectedProvider
+  externalEventId    String
+  calendarId         String?
+  title              String
+  description        String?
+  startAt            DateTime
+  endAt              DateTime
+  sourceUrl          String?
+  syncStatus         SyncStatus        @default(idle)
+  rawPayload         Json?
+  lastSyncedAt       DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  meetings           Meeting[]
+
+  @@unique([provider, externalEventId])
+}
+
+model Meeting {
+  id                 String            @id @default(cuid())
+  userId             String
+  repProfileId       String?
+  leadId             String?
+  calendarEventId    String?
+  connectedAccountId String?
+  provider           ConnectedProvider
+  externalMeetingId  String
+  topic              String
+  joinUrl            String?
+  hostEmail          String?
+  participantCount   Int?
+  hasRecording       Boolean           @default(false)
+  hasTranscript      Boolean           @default(false)
+  recordingAvailableAt DateTime?
+  transcriptAvailableAt DateTime?
+  processingStatus   SyncStatus        @default(idle)
+  processedAt        DateTime?
+  startAt            DateTime?
+  endAt              DateTime?
+  status             MeetingStatus     @default(scheduled)
+  providerMetadata   Json?
+  rawPayload         Json?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repProfile         RepProfile?       @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead               Lead?             @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  calendarEvent      CalendarEvent?    @relation(fields: [calendarEventId], references: [id], onDelete: SetNull)
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  artifacts          MeetingArtifact[]
+  automationJobs     AutomationJob[]
+  callSummary        CallSummary?
+  actionItems        ActionItem[]
+  participants       MeetingParticipant[]
+  notes              LeadNote[]
+  emailDrafts        EmailDraft[]
+  outreachDrafts     OutreachDraft[]
+  accountBriefs      AccountBrief[]
+  contactBriefs      ContactBrief[]
+  draftGenerationContexts DraftGenerationContext[]
+  briefGenerationRuns BriefGenerationRun[]
+  repTaskSuggestions RepTaskSuggestion[]
+  notionSyncRecords  NotionSyncRecord[]
+  webhookEvents      WebhookEvent[]
+
+  @@unique([provider, externalMeetingId])
+  @@index([leadId, status])
+  @@index([repProfileId, startAt])
+}
+
+model MeetingArtifact {
+  id               String              @id @default(cuid())
+  meetingId        String
+  type             MeetingArtifactType
+  status           MeetingArtifactStatus @default(pending)
+  externalArtifactId String?
+  sourceProvider   ConnectedProvider?
+  title            String?
+  sourceUrl        String?
+  storageUrl       String?
+  driveFileId      String?
+  mimeType         String?
+  contentText      String?
+  contentLanguage  String?
+  availableAt      DateTime?
+  providerMetadata Json?
+  rawPayload       Json?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  meeting          Meeting             @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId, type])
+}
+
+model MeetingParticipant {
+  id              String                 @id @default(cuid())
+  meetingId       String
+  externalUserId  String?
+  displayName     String
+  email           String?
+  role            MeetingParticipantRole @default(unknown)
+  attended        Boolean                @default(true)
+  providerMetadata Json?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  meeting         Meeting                @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId, role])
+}
+
+model AutomationJob {
+  id                 String            @id @default(cuid())
+  userId             String?
+  connectedAccountId String?
+  meetingId          String?
+  provider           ConnectedProvider?
+  type               AutomationJobType
+  status             AutomationJobStatus @default(queued)
+  payload            Json?
+  result             Json?
+  attemptCount       Int               @default(0)
+  lastError          String?
+  scheduledFor       DateTime?
+  startedAt          DateTime?
+  completedAt        DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  user               User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  meeting            Meeting?          @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+}
+
+model CallSummary {
+  id                  String            @id @default(cuid())
+  meetingId           String            @unique
+  status              CallSummaryStatus @default(pending)
+  summary             String?
+  keyDiscussionPoints Json?
+  recommendedNextStep String?
+  followUpSnippet     String?
+  modelName           String?
+  generationProvider  String?
+  generatedAt         DateTime?
+  sourceArtifactIds   String[]            @default([])
+  providerMetadata    Json?
+  generationMetadata  Json?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  meeting             Meeting           @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  actionItems         ActionItem[]
+  notes               LeadNote[]
+  notionSyncRecords   NotionSyncRecord[]
+}
+
+model ActionItem {
+  id               String           @id @default(cuid())
+  meetingId        String
+  callSummaryId    String?
+  leadId           String?
+  description      String
+  assigneeName     String?
+  sourceExcerpt    String?
+  confidenceLabel  String?
+  dueAt            DateTime?
+  generatedAt      DateTime?
+  status           ActionItemStatus @default(open)
+  providerMetadata Json?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  meeting          Meeting          @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  callSummary      CallSummary?     @relation(fields: [callSummaryId], references: [id], onDelete: SetNull)
+  lead             Lead?            @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([leadId, status])
+}
+
+model EmailDraft {
+  id                 String           @id @default(cuid())
+  userId             String?
+  repProfileId       String?
+  leadId             String?
+  meetingId          String?
+  connectedAccountId String?
+  type               EmailDraftType   @default(follow_up)
+  status             EmailDraftStatus @default(draft)
+  subject            String
+  bodyText           String
+  recipientEmail     String?
+  modelName          String?
+  generationProvider String?
+  generatedAt        DateTime?
+  approvedAt         DateTime?
+  sentAt             DateTime?
+  providerMetadata   Json?
+  generationMetadata Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  user               User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  repProfile         RepProfile?       @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead               Lead?             @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting            Meeting?          @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  notionSyncRecords  NotionSyncRecord[]
+  derivedOutreachDrafts OutreachDraft[]
+
+  @@index([leadId, status])
+  @@index([meetingId, type])
+}
+
+model OutreachDraft {
+  id                  String              @id @default(cuid())
+  generatedByUserId   String?
+  lastEditedByUserId  String?
+  repProfileId        String?
+  leadId              String?
+  meetingId           String?
+  sourceEmailDraftId  String?
+  type                OutreachDraftType   @default(lead_follow_up)
+  status              OutreachDraftStatus @default(generated)
+  subject             String
+  bodyText            String
+  recipientEmail      String?
+  toneStyle           String?
+  suggestedCta        String?
+  explanation         String?
+  confidenceScore     Float?
+  generatedAt         DateTime?
+  approvedAt          DateTime?
+  archivedAt          DateTime?
+  sentAt              DateTime?
+  generationProvider  String?
+  modelName           String?
+  sourceContext       Json?
+  generationMetadata  Json?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  generatedByUser     User?               @relation("OutreachDraftGenerator", fields: [generatedByUserId], references: [id], onDelete: SetNull)
+  lastEditedByUser    User?               @relation("OutreachDraftEditor", fields: [lastEditedByUserId], references: [id], onDelete: SetNull)
+  repProfile          RepProfile?         @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead                Lead?               @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting             Meeting?            @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  sourceEmailDraft    EmailDraft?         @relation(fields: [sourceEmailDraftId], references: [id], onDelete: SetNull)
+  contexts            DraftGenerationContext[]
+
+  @@index([leadId, status])
+  @@index([repProfileId, type])
+  @@index([meetingId, generatedAt])
+}
+
+model DraftGenerationContext {
+  id                String          @id @default(cuid())
+  outreachDraftId   String
+  leadId            String?
+  meetingId         String?
+  repProfileId      String?
+  sourceEntityType  String
+  sourceEntityId    String
+  contextSummary    String?
+  contextSnapshot   Json?
+  explanationData   Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  outreachDraft     OutreachDraft   @relation(fields: [outreachDraftId], references: [id], onDelete: Cascade)
+  lead              Lead?           @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting           Meeting?        @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  repProfile        RepProfile?     @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+
+  @@index([outreachDraftId])
+  @@index([sourceEntityType, sourceEntityId])
+}
+
+model AccountBrief {
+  id                 String         @id @default(cuid())
+  repProfileId       String?
+  leadId             String?
+  meetingId          String?
+  latestRunId        String?        @unique
+  status             BriefStatus    @default(generated)
+  companyName        String
+  summary            String
+  companyOverview    String?
+  keyContactsSummary String?
+  championSummary    String?
+  movementSummary    String?
+  opportunityThemes  Json?
+  recentActivity     Json?
+  openActionItems    Json?
+  recommendedNextStep String?
+  explanation        String?
+  confidenceScore    Float?
+  generationProvider String?
+  modelName          String?
+  generatedAt        DateTime?
+  reviewedAt         DateTime?
+  approvedAt         DateTime?
+  sourceContext      Json?
+  generationMetadata Json?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  repProfile         RepProfile?    @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead               Lead?          @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting            Meeting?       @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  latestRun          BriefGenerationRun? @relation("LatestAccountBriefRun", fields: [latestRunId], references: [id], onDelete: SetNull)
+  generationRuns     BriefGenerationRun[] @relation("AccountBriefRuns")
+
+  @@index([repProfileId, generatedAt])
+  @@index([leadId, status])
+}
+
+model ContactBrief {
+  id                  String         @id @default(cuid())
+  repProfileId        String?
+  leadId              String
+  meetingId           String?
+  latestRunId         String?        @unique
+  status              BriefStatus    @default(generated)
+  summary             String
+  roleSummary         String?
+  relationshipSummary String?
+  movementSummary     String?
+  suggestedApproach   String?
+  outreachTiming      String?
+  recommendedNextStep String?
+  explanation         String?
+  confidenceScore     Float?
+  generationProvider  String?
+  modelName           String?
+  generatedAt         DateTime?
+  reviewedAt          DateTime?
+  approvedAt          DateTime?
+  sourceContext       Json?
+  generationMetadata  Json?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  repProfile          RepProfile?    @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead                Lead           @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  meeting             Meeting?       @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  latestRun           BriefGenerationRun? @relation("LatestContactBriefRun", fields: [latestRunId], references: [id], onDelete: SetNull)
+  generationRuns      BriefGenerationRun[] @relation("ContactBriefRuns")
+
+  @@index([leadId, generatedAt])
+  @@index([repProfileId, status])
+}
+
+model BriefGenerationRun {
+  id                 String       @id @default(cuid())
+  actorUserId        String?
+  repProfileId       String?
+  leadId             String?
+  meetingId          String?
+  accountBriefId     String?
+  contactBriefId     String?
+  briefType          BriefType
+  status             BriefStatus  @default(generated)
+  inputContext       Json?
+  outputSummary      String?
+  explanation        String?
+  confidenceScore    Float?
+  generationProvider String?
+  modelName          String?
+  generatedAt        DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  actorUser          User?        @relation("BriefRunActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  repProfile         RepProfile?  @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead               Lead?        @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting            Meeting?     @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  accountBrief       AccountBrief? @relation("AccountBriefRuns", fields: [accountBriefId], references: [id], onDelete: SetNull)
+  contactBrief       ContactBrief? @relation("ContactBriefRuns", fields: [contactBriefId], references: [id], onDelete: SetNull)
+  latestForAccountBrief AccountBrief? @relation("LatestAccountBriefRun")
+  latestForContactBrief ContactBrief? @relation("LatestContactBriefRun")
+
+  @@index([leadId, briefType])
+  @@index([repProfileId, generatedAt])
+}
+
+model PriorityScore {
+  id                String             @id @default(cuid())
+  repProfileId      String?
+  leadId            String?
+  entityType        PriorityEntityType
+  entityKey         String
+  score             Int
+  band              PriorityBand
+  explanation       String?
+  reasonSummary     String?
+  sourceConfidence  Float?
+  lastEvaluatedAt   DateTime
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  repProfile        RepProfile?        @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead              Lead?              @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  reasons           PriorityReason[]
+  repTaskSuggestions RepTaskSuggestion[]
+
+  @@unique([entityType, entityKey])
+  @@index([band, lastEvaluatedAt])
+  @@index([repProfileId, band])
+}
+
+model PriorityReason {
+  id              String        @id @default(cuid())
+  priorityScoreId String
+  code            String
+  label           String
+  description     String?
+  weight          Int           @default(0)
+  sourceContext   Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  priorityScore   PriorityScore @relation(fields: [priorityScoreId], references: [id], onDelete: Cascade)
+
+  @@index([priorityScoreId, code])
+}
+
+model RepTaskSuggestion {
+  id                          String                   @id @default(cuid())
+  repProfileId                String?
+  leadId                      String?
+  meetingId                   String?
+  careerMovementAlertId       String?
+  expansionOpportunitySignalId String?
+  repActionPromptId           String?
+  priorityScoreId             String?
+  type                        RepTaskSuggestionType
+  status                      RepTaskSuggestionStatus @default(generated)
+  priority                    AlertPriority           @default(medium)
+  title                       String
+  reason                      String
+  explanation                 String?
+  recommendedDueAt            DateTime?
+  scheduledAt                 DateTime?
+  scheduledEndAt              DateTime?
+  snoozedUntil                DateTime?
+  confidenceScore             Float?
+  sourceContext               Json?
+  createdAt                   DateTime                 @default(now())
+  updatedAt                   DateTime                 @updatedAt
+  repProfile                  RepProfile?              @relation(fields: [repProfileId], references: [id], onDelete: SetNull)
+  lead                        Lead?                    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  meeting                     Meeting?                 @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  careerMovementAlert         CareerMovementAlert?     @relation(fields: [careerMovementAlertId], references: [id], onDelete: SetNull)
+  expansionOpportunitySignal  ExpansionOpportunitySignal? @relation(fields: [expansionOpportunitySignalId], references: [id], onDelete: SetNull)
+  repActionPrompt             RepActionPrompt?         @relation(fields: [repActionPromptId], references: [id], onDelete: SetNull)
+  priorityScore               PriorityScore?           @relation(fields: [priorityScoreId], references: [id], onDelete: SetNull)
+
+  @@index([repProfileId, status])
+  @@index([leadId, priority])
+}
+
+model NotionSyncRecord {
+  id                 String            @id @default(cuid())
+  userId             String
+  connectedAccountId String?
+  meetingId          String?
+  callSummaryId      String?
+  emailDraftId       String?
+  destinationType    NoteDestinationType
+  sourceEntityType   String
+  sourceEntityId     String
+  notionPageId       String?
+  notionDatabaseId   String?
+  syncStatus         SyncStatus        @default(idle)
+  externalUrl        String?
+  lastSyncedAt       DateTime?
+  errorMessage       String?
+  metadata           Json?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  meeting            Meeting?          @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  callSummary        CallSummary?      @relation(fields: [callSummaryId], references: [id], onDelete: SetNull)
+  emailDraft         EmailDraft?       @relation(fields: [emailDraftId], references: [id], onDelete: SetNull)
+}
+
+model WebhookEvent {
+  id                 String             @id @default(cuid())
+  provider           ConnectedProvider
+  eventType          String
+  deliveryId         String?
+  status             WebhookEventStatus @default(received)
+  verified           Boolean            @default(false)
+  headers            Json?
+  payload            Json
+  errorMessage       String?
+  receivedAt         DateTime           @default(now())
+  processedAt        DateTime?
+  connectedAccountId String?
+  meetingId          String?
+  connectedAccount   ConnectedAccount?  @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+  meeting            Meeting?           @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, deliveryId])
+}
+
+model RepJournalEntry {
+  id           String     @id @default(cuid())
+  repProfileId String
+  title        String?
+  body         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  repProfile   RepProfile @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+
+  @@index([repProfileId, createdAt])
+}
+
+model RepNote {
+  id             String           @id @default(cuid())
+  repProfileId   String
+  title          String?
+  body           String
+  templateType   NoteTemplateType @default(blank)
+  leadId         String?
+  accountId      String?
+  opportunityId  String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  repProfile     RepProfile       @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+  lead           Lead?            @relation("LeadRepNotes", fields: [leadId], references: [id], onDelete: SetNull)
+  account        Account?         @relation("AccountRepNotes", fields: [accountId], references: [id], onDelete: SetNull)
+  opportunity    Opportunity?     @relation("OpportunityRepNotes", fields: [opportunityId], references: [id], onDelete: SetNull)
+
+  @@index([repProfileId, createdAt])
+  @@index([leadId])
+  @@index([accountId])
+  @@index([opportunityId])
+}
+
+model Proposal {
+  id                    String              @id @default(cuid())
+  repProfileId          String
+  leadId                String?
+  accountId             String?
+  opportunityId         String?
+  templateId            String?
+  title                 String
+  status                ProposalStatus      @default(draft)
+  // Legacy flat-text fields kept for backward compat / AI generation
+  executiveSummary      String?
+  aboutUs               String?
+  scopeOfWork           String?
+  deliverables          String?
+  timeline              String?
+  pricing               String?
+  terms                 String?
+  nextSteps             String?
+  // Block engine
+  useBlockEngine        Boolean             @default(false)
+  // Client identity
+  clientName            String?
+  clientEmail           String?
+  clientCompany         String?
+  // Branding
+  coverImageUrl         String?
+  brandColor            String?
+  fontFamily            String?
+  footerText            String?
+  // Financials
+  totalValueCents       Int?
+  paymentType           ProposalPaymentType @default(none)
+  depositPercent        Int?
+  // Scheduling
+  schedulingUrl         String?
+  // Stripe
+  stripeSessionId       String?
+  stripePaymentIntentId String?
+  paidAt                DateTime?
+  partiallyPaidAt       DateTime?
+  // Lifecycle
+  expiresAt             DateTime?
+  sentAt                DateTime?
+  viewedAt              DateTime?
+  acceptedAt            DateTime?
+  declinedAt            DateTime?
+  shareToken            String?             @unique
+  // AI
+  aiGeneratedAt         DateTime?
+  // Signature
+  signatureData         String?
+  signerName            String?
+  signerEmail           String?
+  signerTitle           String?
+  signedAt              DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  repProfile            RepProfile          @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+  lead                  Lead?               @relation("LeadProposals", fields: [leadId], references: [id], onDelete: SetNull)
+  account               Account?            @relation("AccountProposals", fields: [accountId], references: [id], onDelete: SetNull)
+  opportunity           Opportunity?        @relation("OpportunityProposals", fields: [opportunityId], references: [id], onDelete: SetNull)
+  blocks                ProposalBlock[]
+  packages              ProposalPricingPackage[]
+  analyticsEvents       ProposalAnalyticsEvent[]
+  payments              ProposalPayment[]
+
+  @@index([repProfileId, status])
+  @@index([shareToken])
+  @@index([leadId])
+  @@index([accountId])
+  @@index([opportunityId])
+}
+
+model ProposalBlock {
+  id         String            @id @default(cuid())
+  proposalId String
+  blockType  ProposalBlockType
+  position   Int
+  isVisible  Boolean           @default(true)
+  content    Json
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  proposal   Proposal          @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId, position])
+}
+
+model ProposalPricingPackage {
+  id              String                @id @default(cuid())
+  proposalId      String
+  name            String
+  description     String?
+  priceCents      Int
+  isRecurring     Boolean               @default(false)
+  recurringPeriod String?
+  isFeatured      Boolean               @default(false)
+  position        Int                   @default(0)
+  features        String[]
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  proposal        Proposal              @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  addOns          ProposalPackageAddOn[]
+
+  @@index([proposalId])
+}
+
+model ProposalPackageAddOn {
+  id          String                 @id @default(cuid())
+  packageId   String
+  name        String
+  description String?
+  priceCents  Int
+  isOptional  Boolean                @default(true)
+  position    Int                    @default(0)
+  createdAt   DateTime               @default(now())
+  package     ProposalPricingPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@index([packageId])
+}
+
+model ProposalTemplate {
+  id          String                  @id @default(cuid())
+  repProfileId String?
+  name        String
+  description String?
+  category    String?
+  isGlobal    Boolean                 @default(false)
+  previewUrl  String?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  blocks      ProposalTemplateBlock[]
+
+  @@index([repProfileId])
+  @@index([isGlobal])
+}
+
+model ProposalTemplateBlock {
+  id          String            @id @default(cuid())
+  templateId  String
+  blockType   ProposalBlockType
+  position    Int
+  content     Json
+  createdAt   DateTime          @default(now())
+  template    ProposalTemplate  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId, position])
+}
+
+model ProposalAnalyticsEvent {
+  id           String            @id @default(cuid())
+  proposalId   String
+  eventType    ProposalEventType
+  sessionId    String?
+  ipAddress    String?
+  userAgent    String?
+  metadata     Json?
+  occurredAt   DateTime          @default(now())
+  proposal     Proposal          @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId, eventType])
+  @@index([proposalId, occurredAt])
+}
+
+model ProposalPayment {
+  id                    String   @id @default(cuid())
+  proposalId            String
+  stripePaymentIntentId String?  @unique
+  stripeSessionId       String?  @unique
+  amountCents           Int
+  currency              String   @default("usd")
+  status                String
+  paidAt                DateTime?
+  refundedAt            DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  proposal              Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId])
+}
+
+model RepQuota {
+  id             String   @id @default(cuid())
+  repProfileId   String
+  period         String
+  targetCents    Int
+  closedCents    Int      @default(0)
+  pipelineCents  Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  repProfile     RepProfile @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([repProfileId, period])
+  @@index([repProfileId])
+}
+
+model WebhookEndpoint {
+  id          String   @id @default(cuid())
+  userId      String
+  url         String
+  secret      String
+  events      String[]
+  isActive    Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model FollowUpSequence {
+  id           String               @id @default(cuid())
+  repProfileId String
+  name         String
+  description  String?
+  isActive     Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  repProfile   RepProfile           @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+  steps        FollowUpStep[]
+  enrollments  FollowUpEnrollment[]
+
+  @@index([repProfileId])
+}
+
+model FollowUpStep {
+  id           String           @id @default(cuid())
+  sequenceId   String
+  stepNumber   Int
+  delayDays    Int
+  subject      String?
+  bodyTemplate String
+  createdAt    DateTime         @default(now())
+  sequence     FollowUpSequence @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+
+  @@unique([sequenceId, stepNumber])
+  @@index([sequenceId])
+}
+
+model FollowUpEnrollment {
+  id           String              @id @default(cuid())
+  sequenceId   String
+  leadId       String
+  currentStep  Int                 @default(0)
+  status       EnrollmentStatus    @default(active)
+  startedAt    DateTime            @default(now())
+  completedAt  DateTime?
+  cancelledAt  DateTime?
+  nextSendAt   DateTime?
+  sequence     FollowUpSequence    @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  lead         Lead                @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@unique([sequenceId, leadId])
+  @@index([sequenceId])
+  @@index([leadId])
+  @@index([nextSendAt])
+}
+
+enum EnrollmentStatus {
+  active
+  paused
+  completed
+  cancelled
+}
+
+model Booking {
+  id            String     @id @default(cuid())
+  repProfileId  String
+  guestName     String
+  guestEmail    String
+  guestPhone    String?
+  guestNotes    String?
+  requestedAt   DateTime
+  durationMins  Int        @default(30)
+  status        String     @default("pending")
+  createdAt     DateTime   @default(now())
+  repProfile    RepProfile @relation(fields: [repProfileId], references: [id], onDelete: Cascade)
+
+  @@index([repProfileId])
+}

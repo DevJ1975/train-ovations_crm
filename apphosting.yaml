@@ -1,0 +1,15 @@
+runConfig:
+  cpu: 1
+  memoryMiB: 512
+  concurrency: 80
+  minInstances: 0
+  maxInstances: 10
+
+env:
+  # These are non-secret build/runtime vars.
+  # Secrets (DATABASE_URL, NEXTAUTH_SECRET, API keys) must be added via
+  # the Firebase App Hosting console → Environment Variables → Secret Manager.
+  - variable: NODE_ENV
+    value: production
+  - variable: NEXT_TELEMETRY_DISABLED
+    value: "1"
