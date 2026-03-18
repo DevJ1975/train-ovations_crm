@@ -79,14 +79,25 @@ function LinkedInLogo() {
 function OutlookLogo() {
   return (
     <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-      <rect width="24" height="24" rx="4" fill="#0078D4" />
-      {/* Envelope back panel */}
-      <rect x="11" y="7" width="10" height="10" rx="1" fill="#50D9FF" />
-      {/* Envelope fold line */}
-      <path d="M11 8l5 4 5-4" stroke="#0078D4" strokeWidth="1" fill="none" />
-      {/* Outlook "O" circle overlay */}
-      <rect x="3" y="8" width="9" height="9" rx="4.5" fill="#fff" />
-      <rect x="5.5" y="10.5" width="4" height="4" rx="2" fill="#0078D4" />
+      <defs>
+        <linearGradient id="outlook-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#1490DF" />
+          <stop offset="100%" stopColor="#0364B8" />
+        </linearGradient>
+        <linearGradient id="outlook-envelope" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#28A8E8" />
+          <stop offset="100%" stopColor="#0078D4" />
+        </linearGradient>
+      </defs>
+      {/* Blue background card */}
+      <rect width="24" height="24" rx="3" fill="url(#outlook-bg)" />
+      {/* White envelope body */}
+      <rect x="11.5" y="7.5" width="9" height="9" rx="1" fill="url(#outlook-envelope)" />
+      {/* Envelope chevron fold */}
+      <path d="M11.5 8.5 L16 12 L20.5 8.5" fill="none" stroke="#fff" strokeWidth="0.9" strokeLinejoin="round" />
+      {/* Outlook "O" — white circle with blue hole */}
+      <circle cx="7.5" cy="12" r="4.5" fill="#fff" />
+      <circle cx="7.5" cy="12" r="2.2" fill="#0078D4" />
     </svg>
   );
 }
@@ -94,18 +105,29 @@ function OutlookLogo() {
 function CalendarLogo() {
   return (
     <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-      <rect width="24" height="24" rx="4" fill="#0078D4" />
-      {/* Calendar header */}
-      <rect x="4" y="5" width="16" height="3" rx="1" fill="#fff" fillOpacity="0.3" />
+      <defs>
+        <linearGradient id="cal-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1AC5FF" />
+          <stop offset="100%" stopColor="#0078D4" />
+        </linearGradient>
+      </defs>
+      <rect width="24" height="24" rx="3" fill="url(#cal-bg)" />
+      {/* Calendar top bar */}
+      <rect x="3.5" y="4" width="17" height="4.5" rx="1" fill="#fff" fillOpacity="0.25" />
       {/* Calendar body */}
-      <rect x="4" y="9" width="16" height="10" rx="1" fill="#fff" />
+      <rect x="3.5" y="9" width="17" height="11.5" rx="1" fill="#fff" />
+      {/* Binding pegs */}
+      <rect x="7.5" y="2.5" width="2" height="3.5" rx="1" fill="#fff" />
+      <rect x="14.5" y="2.5" width="2" height="3.5" rx="1" fill="#fff" />
+      {/* Grid lines */}
+      <line x1="3.5" y1="13" x2="20.5" y2="13" stroke="#0078D4" strokeWidth="0.5" strokeOpacity="0.3" />
+      <line x1="3.5" y1="16.5" x2="20.5" y2="16.5" stroke="#0078D4" strokeWidth="0.5" strokeOpacity="0.3" />
+      <line x1="9.5" y1="9" x2="9.5" y2="20.5" stroke="#0078D4" strokeWidth="0.5" strokeOpacity="0.3" />
+      <line x1="15" y1="9" x2="15" y2="20.5" stroke="#0078D4" strokeWidth="0.5" strokeOpacity="0.3" />
+      {/* Today highlight */}
+      <rect x="10" y="9.5" width="4.5" height="3" rx="0.5" fill="#0078D4" fillOpacity="0.15" />
       {/* Day number */}
-      <text x="12" y="17" textAnchor="middle" fontSize="7" fontWeight="700" fill="#0078D4" fontFamily="system-ui">
-        28
-      </text>
-      {/* Binding dots */}
-      <circle cx="8.5" cy="5" r="1.2" fill="#fff" />
-      <circle cx="15.5" cy="5" r="1.2" fill="#fff" />
+      <text x="12.2" y="12.2" textAnchor="middle" fontSize="2.6" fontWeight="700" fill="#0078D4" fontFamily="system-ui, sans-serif">14</text>
     </svg>
   );
 }
@@ -113,14 +135,23 @@ function CalendarLogo() {
 function TeamsLogo() {
   return (
     <svg aria-hidden="true" className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-      <rect width="24" height="24" rx="4" fill="#6264A7" />
-      {/* Primary person head */}
-      <circle cx="13.5" cy="8" r="2.5" fill="#fff" />
-      {/* Primary person body */}
-      <path d="M8.5 19c0-2.76 2.24-5 5-5h0c2.76 0 5 2.24 5 5" stroke="#fff" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* Secondary person (smaller, behind) */}
-      <circle cx="7.5" cy="9" r="1.8" fill="#fff" fillOpacity="0.6" />
-      <path d="M4 19c0-2 1.57-3.5 3.5-3.5" stroke="#fff" strokeWidth="1.2" fill="none" strokeOpacity="0.6" strokeLinecap="round" />
+      <defs>
+        <linearGradient id="teams-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#7B83EB" />
+          <stop offset="100%" stopColor="#4B53BC" />
+        </linearGradient>
+      </defs>
+      <rect width="24" height="24" rx="3" fill="url(#teams-bg)" />
+      {/* Secondary avatar (back-left, semi-transparent) */}
+      <circle cx="8.5" cy="8.5" r="2.2" fill="#fff" fillOpacity="0.6" />
+      <path d="M4.5 18.5c0-2.2 1.8-4 4-4" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.6" fill="none" />
+      {/* Primary avatar */}
+      <circle cx="14.5" cy="8" r="3" fill="#fff" />
+      {/* Primary body */}
+      <path d="M8 19.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      {/* "T" badge top-right */}
+      <rect x="14" y="2" width="8" height="6" rx="1.5" fill="#fff" />
+      <text x="18" y="6.8" textAnchor="middle" fontSize="4.5" fontWeight="800" fill="#4B53BC" fontFamily="system-ui, sans-serif">T</text>
     </svg>
   );
 }
